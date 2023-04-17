@@ -4,7 +4,7 @@ CREATE DATABASE peliculas;
 
 -- Create table for movies
 CREATE TABLE movie (
-movie_id INT PRIMARY KEY,
+id INT PRIMARY KEY,
 title VARCHAR(255),
 release_year INT,
 director VARCHAR(255)
@@ -13,24 +13,25 @@ director VARCHAR(255)
 
 -- Create table for actors
 CREATE TABLE actor (
-movie_id INT REFERENCES movie(movie_id),
+id SERIAL PRIMARY KEY,
 actor_name VARCHAR(255),
-PRIMARY KEY (movie_id, actor_name)
+movie_id INT REFERENCES movie(id)
 );
+
 
 
 -- Cargar ambos archivos a su tabla correspondiente y aplicar el truncado de estas.
 
 TRUNCATE table movie,actor;
 
-\COPY movie(movie_id,title,release_year,director) FROM 'assets/docs/peliculas.csv' DELIMITER ',' CSV HEADER;
+\COPY movie(id,title,release_year,director) FROM 'assets/docs/peliculas.csv' DELIMITER ',' CSV HEADER;
 
 \COPY actor(movie_id,actor_name) FROM 'assets/docs/reparto.csv' DELIMITER ',' CSV HEADER;
 
 
 -- Obtener el ID de la película “Titanic”.
 
-SELECT movie_id FROM movie WHERE title = 'Titanic';
+SELECT id FROM movie WHERE title = 'Titanic';
 
 
 -- Listar a todos los actores que aparecen en la película "Titanic".
